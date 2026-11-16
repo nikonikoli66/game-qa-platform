@@ -1,0 +1,36 @@
+server:
+  # 默认 18080 而不是 8080：开发机上 8080 极容易被本地代理/其它服务占用，
+  # 启动脚本会用 --server.port 显式覆盖（命令行参数优先级最高）
+  port: 18080
+
+spring:
+  application:
+    name: game-qa-orchestrator
+  datasource:
+    # 内存库：演示不需要外部依赖，重启即清空；生产换成 MySQL/PostgreSQL 只需改这里
+    url: jdbc:h2:mem:orchestrator;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+
+orchestrator:
+  worker-base-url: http://127.0.0.1:8100
+  # 同时执行的用例数上限。调大能压更多并发，但要注意下游仍跑在单机 Python 上
+  concurrency: 3
+  connect-timeout-ms: 2000
+  # 单条用例含异步轮询，读超时必须给足，否则会误判为执行器超时
+  read-timeout-ms: 180000
+  max-queue-size: 1000
+
+logging:
+  level:
+    root: WARN
+    com.gameqa.orchestrator: INFO
+    org.hibernate.SQL: WARN

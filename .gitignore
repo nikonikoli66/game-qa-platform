@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
+
+# 运行产物（用例库、脚本快照、JUnit 报告）
+data/app.db
+data/*.db
+data/runtime/
+
+# Java 编排模块构建产物
+java-orchestrator/target/
+
+# 编辑器与本地配置
+.idea/
+.vscode/
+.streamlit/secrets.toml
+
+# 日志
+*.log
